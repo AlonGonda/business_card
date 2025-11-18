@@ -1,5 +1,4 @@
 import BusinessCard from '@/components/BusinessCard'
-import BackgroundMusic from '@/components/BackgroundMusic'
 import { ContactInfo } from '@/lib/vcard'
 
 const contact: ContactInfo = {
@@ -32,8 +31,6 @@ export default function Home() {
           services={services}
         />
       </div>
-      
-      <BackgroundMusic />
     </main>
   )
 }
