@@ -149,7 +149,7 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
                     Every performance is a masterpiece, crafted with passion, precision, and pure musical magic! Whether you're planning an intimate gathering or a grand celebration, I bring the soulful sound of the saxophone to make your event truly unforgettable.
                   </p>
                   <div className="card-services-cta text-primary-300/90 font-semibold italic w-full text-center flex-shrink-0 mt-1 px-2 break-words">
-                    ✨ Let's make some beautiful music together! 🎷✨
+                    ✨ Let's have some fun! 🎷✨
                   </div>
                 </div>
               </div>
