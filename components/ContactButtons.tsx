@@ -191,7 +191,7 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
                   <div className="flex flex-col items-center gap-1">
                     <FacebookShareButton
                       url={shareUrl}
-                      quote={shareDescription}
+                      hashtag="#Saxophone"
                       className="flex items-center justify-center w-12 h-12 rounded-full bg-[#1877F2] hover:bg-[#166FE5] transition-colors"
                     >
                       <FacebookIcon size={32} round />
