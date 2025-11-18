@@ -115,8 +115,8 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
   ]
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
+    <div className="flex flex-col space-y-3">
+      <div className="grid grid-cols-2 gap-2">
         {buttons.map((button, index) => {
           const Icon = button.icon
           return (
@@ -130,14 +130,14 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              className={`flex items-center justify-center gap-1 sm:gap-2 p-3 sm:p-4 rounded-xl border transition-all ${
+              className={`flex items-center justify-center gap-1.5 p-3 rounded-lg border transition-all ${
                 button.color === 'primary'
                   ? 'border-primary-500/30 bg-primary-950/30 hover:border-primary-500/50 hover:bg-primary-950/50 text-primary-300'
                   : 'border-accent-500/30 bg-accent-950/30 hover:border-accent-500/50 hover:bg-accent-950/50 text-accent-300'
               }`}
             >
-              <Icon className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-              <span className="font-medium text-xs sm:text-sm break-words text-center">{button.label}</span>
+              <Icon className="w-4 h-4 flex-shrink-0" />
+              <span className="font-medium text-sm break-words text-center">{button.label}</span>
             </motion.a>
           )
         })}
@@ -148,9 +148,9 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
           onClick={handleSaveContact}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-3 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-medium transition-colors text-xs sm:text-sm"
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors text-sm"
         >
-          <FaPhone className="w-3 h-3 sm:w-4 sm:h-4" />
+          <FaPhone className="w-4 h-4" />
           <span>Save to Contacts</span>
         </motion.button>
         <div className="relative" ref={shareMenuRef}>
@@ -159,12 +159,11 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center gap-2 px-3 py-2 sm:px-4 sm:py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-xl font-medium transition-colors text-xs sm:text-sm"
+            className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-sm"
             aria-label="Share contact"
           >
-            <FaShareAlt className="w-3 h-3 sm:w-4 sm:h-4" />
-            <span className="hidden sm:inline">{copied ? 'Copied!' : 'Share'}</span>
-            <span className="sm:hidden">{copied ? '✓' : ''}</span>
+            <FaShareAlt className="w-4 h-4" />
+            <span>{copied ? 'Copied!' : 'Share'}</span>
           </motion.button>
 
           <AnimatePresence>
@@ -174,7 +173,7 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -10 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-full right-0 mb-2 p-4 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-50 min-w-[240px] sm:min-w-[200px]"
+                className="absolute bottom-full right-0 mb-2 p-4 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-50 min-w-[240px]"
               >
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-sm font-semibold text-white">Share</h3>
@@ -274,4 +273,3 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
     </div>
   )
 }
-

@@ -9,6 +9,7 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     height: 100%;
+    font-size: 16px;
   }
   
   body {
@@ -20,36 +21,24 @@
 }
 
 @layer components {
-  h1 {
-    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl;
-  }
-  
-  h2 {
-    @apply text-2xl sm:text-3xl md:text-4xl;
-  }
-  
-  h3 {
-    @apply text-xl sm:text-2xl;
-  }
-  
   img {
     @apply max-w-full h-auto;
     height: auto;
   }
-  
+
   a, button {
     @apply transition-colors duration-200;
   }
-  
+
   /* 3D Card Flip Styles */
   .perspective-1000 {
     perspective: 1000px;
   }
-  
+
   .preserve-3d {
     transform-style: preserve-3d;
   }
-  
+
   .backface-hidden {
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -65,35 +54,145 @@
     display: none;
   }
 
-  /* Container query for responsive text sizing */
+  /* Container query for responsive sizing - Fixed width container */
   .business-card-container {
     container-type: inline-size;
     container-name: card;
+    width: 100%;
+    max-width: 512px; /* Fixed desktop-like width */
   }
 
-  /* Responsive single-line text that scales with container */
-  @container card (max-width: 350px) {
-    .single-line-text {
-      font-size: 0.7em;
+  /* Base typography - scales with container */
+  .card-base {
+    font-size: 1rem; /* 16px base - desktop size */
+  }
+
+  /* Responsive text elements using container queries */
+  .card-h1 {
+    font-size: 2em; /* Desktop size */
+    line-height: 1.2;
+  }
+
+  .card-title {
+    font-size: 1.25em; /* Desktop size */
+  }
+
+  .card-tagline {
+    font-size: 1em; /* Desktop size */
+  }
+
+  .card-hint {
+    font-size: 0.95em; /* Desktop size */
+    line-height: 1.4;
+  }
+
+  .card-services-title {
+    font-size: 1.5em; /* Desktop size */
+  }
+
+  .card-services-text {
+    font-size: 0.95em; /* Desktop size */
+    line-height: 1.5;
+  }
+
+  .card-services-cta {
+    font-size: 0.95em; /* Desktop size */
+    line-height: 1.5;
+  }
+
+  .card-description {
+    font-size: 0.9em; /* Desktop size */
+    line-height: 1.6;
+  }
+
+  /* Responsive spacing - desktop-first */
+  .card-padding {
+    padding: 2.5em; /* Desktop padding */
+  }
+
+  .card-gap {
+    gap: 1.5em; /* Desktop gap */
+  }
+
+  /* Image sizing - desktop size */
+  .card-image {
+    width: 12em; /* Desktop size */
+    height: 12em;
+  }
+
+  /* Scale down for smaller containers while maintaining proportions */
+  @container card (max-width: 480px) {
+    .card-base {
+      font-size: 0.9375rem; /* 15px */
+    }
+    
+    .card-padding {
+      padding: 2em;
+    }
+    
+    .card-image {
+      width: 11em;
+      height: 11em;
     }
   }
 
-  @container card (min-width: 351px) and (max-width: 500px) {
-    .single-line-text {
-      font-size: 0.75em;
+  @container card (max-width: 440px) {
+    .card-base {
+      font-size: 0.875rem; /* 14px */
+    }
+    
+    .card-padding {
+      padding: 1.75em;
+    }
+    
+    .card-image {
+      width: 10em;
+      height: 10em;
     }
   }
 
-  @container card (min-width: 501px) and (max-width: 768px) {
-    .single-line-text {
-      font-size: 0.8em;
+  @container card (max-width: 400px) {
+    .card-base {
+      font-size: 0.8125rem; /* 13px */
+    }
+    
+    .card-padding {
+      padding: 1.5em;
+    }
+    
+    .card-image {
+      width: 9em;
+      height: 9em;
     }
   }
 
-  @container card (min-width: 769px) {
-    .single-line-text {
-      font-size: 0.85em;
+  @container card (max-width: 360px) {
+    .card-base {
+      font-size: 0.75rem; /* 12px */
+    }
+    
+    .card-padding {
+      padding: 1.25em;
+    }
+    
+    .card-image {
+      width: 8em;
+      height: 8em;
+    }
+  }
+
+  @container card (max-width: 320px) {
+    .card-base {
+      font-size: 0.6875rem; /* 11px */
+    }
+    
+    .card-padding {
+      padding: 1em;
+    }
+    
+    .card-image {
+      width: 7em;
+      height: 7em;
     }
   }
 }
-

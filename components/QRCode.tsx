@@ -3,7 +3,7 @@
 import { QRCodeSVG } from 'qrcode.react'
 import { ContactInfo } from '@/lib/vcard'
 import { generateVCard } from '@/lib/vcard'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { FaDownload } from 'react-icons/fa'
 
@@ -15,20 +15,31 @@ interface QRCodeProps {
 export default function QRCode({ contact, size = 200 }: QRCodeProps) {
   const [isDownloading, setIsDownloading] = useState(false)
   const [qrSize, setQrSize] = useState(size)
+  const containerRef = useRef<HTMLDivElement>(null)
   const vcardData = generateVCard(contact)
   
-  // Make QR code responsive to screen size
+  // Make QR code responsive to container size
   useEffect(() => {
     const updateSize = () => {
-      const maxWidth = window.innerWidth * 0.4
-      const maxHeight = window.innerHeight * 0.3
-      const newSize = Math.min(size, maxWidth, maxHeight, 250)
-      setQrSize(Math.max(Math.round(newSize), 120)) // Minimum 120px, larger for better visibility
+      if (containerRef.current) {
+        const containerWidth = containerRef.current.offsetWidth
+        // QR code should be about 40% of container width, with min/max constraints
+        const calculatedSize = containerWidth * 0.4
+        const newSize = Math.min(Math.max(calculatedSize, 140), 200)
+        setQrSize(Math.round(newSize))
+      }
     }
     updateSize()
     window.addEventListener('resize', updateSize)
-    return () => window.removeEventListener('resize', updateSize)
-  }, [size])
+    const resizeObserver = new ResizeObserver(updateSize)
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current)
+    }
+    return () => {
+      window.removeEventListener('resize', updateSize)
+      resizeObserver.disconnect()
+    }
+  }, [])
 
   const handleDownload = () => {
     setIsDownloading(true)
@@ -47,12 +58,12 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-2 sm:gap-3 md:gap-4 w-full">
+    <div ref={containerRef} className="flex flex-col items-center gap-2 w-full">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="p-2 sm:p-3 md:p-4 bg-white rounded-lg sm:rounded-xl shadow-lg"
+        className="p-2 bg-white rounded-lg shadow-lg"
       >
         <QRCodeSVG
           value={vcardData}
@@ -66,12 +77,11 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
         disabled={isDownloading}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-xs sm:text-sm"
+        className="flex items-center gap-2 px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm"
       >
-        <FaDownload className="w-3 h-3 sm:w-4 sm:h-4" />
+        <FaDownload className="w-4 h-4" />
         <span>Save Contact</span>
       </motion.button>
     </div>
   )
 }
-
