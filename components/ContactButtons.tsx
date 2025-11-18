@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaPhone, FaEnvelope, FaWhatsapp, FaInstagram, FaShareAlt, FaTimes } from 'react-icons/fa'
 import { ContactInfo } from '@/lib/vcard'
-import { downloadVCard } from '@/lib/vcard'
 import { useState, useEffect, useRef } from 'react'
 import {
   FacebookShareButton,
@@ -81,10 +80,6 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
     }
   }
 
-  const handleSaveContact = () => {
-    downloadVCard(contact, `${contact.name.replace(/\s+/g, '_')}.vcf`)
-  }
-
   const buttons = [
     {
       icon: FaPhone,
@@ -144,22 +139,13 @@ export default function ContactButtons({ contact, whatsappUrl, instagramUrl }: C
       </div>
 
       <div className="flex gap-2">
-        <motion.button
-          onClick={handleSaveContact}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors text-sm"
-        >
-          <FaPhone className="w-4 h-4" />
-          <span>Save to Contacts</span>
-        </motion.button>
-        <div className="relative" ref={shareMenuRef}>
+        <div className="relative flex-1" ref={shareMenuRef}>
           <motion.button
             onClick={() => setShowShareMenu(!showShareMenu)}
             type="button"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center justify-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-sm"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors text-sm"
             aria-label="Share contact"
           >
             <FaShareAlt className="w-4 h-4" />

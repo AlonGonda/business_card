@@ -35,10 +35,11 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
             {/* Flip Button */}
             <button
               onClick={() => setIsFlipped(!isFlipped)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-800/50 hover:bg-gray-700/50 transition-colors z-10"
+              className="absolute top-3 right-3 px-3 py-2 rounded-lg bg-primary-600/90 hover:bg-primary-500 border-2 border-primary-400/50 shadow-lg transition-all z-10 flex items-center gap-2 group"
               aria-label="Flip card"
             >
-              <FaSync className="w-4 h-4 text-gray-400" />
+              <FaSync className="w-4 h-4 text-white group-hover:rotate-180 transition-transform duration-300" />
+              <span className="text-white text-sm font-medium hidden sm:inline">Flip</span>
             </button>
 
             {/* Profile Image */}
@@ -111,10 +112,11 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
             {/* Flip Button */}
             <button
               onClick={() => setIsFlipped(!isFlipped)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-800/50 hover:bg-gray-700/50 transition-colors z-10"
+              className="absolute top-3 right-3 px-3 py-2 rounded-lg bg-primary-600/90 hover:bg-primary-500 border-2 border-primary-400/50 shadow-lg transition-all z-10 flex items-center gap-2 group"
               aria-label="Flip card"
             >
-              <FaSync className="w-4 h-4 text-gray-400" />
+              <FaSync className="w-4 h-4 text-white group-hover:rotate-180 transition-transform duration-300" />
+              <span className="text-white text-sm font-medium hidden sm:inline">Flip</span>
             </button>
 
             {/* Header */}
