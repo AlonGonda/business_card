@@ -1,0 +1,19 @@
+{
+  "name": "Alon Gonda - Professional Saxophonist",
+  "short_name": "Alon Gonda",
+  "description": "Professional saxophone performances for events, weddings, corporate functions, and private occasions",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#14b8a6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/professional-portrait.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
+
