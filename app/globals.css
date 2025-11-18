@@ -54,5 +54,46 @@
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
+
+  /* Hide scrollbar for horizontal scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Container query for responsive text sizing */
+  .business-card-container {
+    container-type: inline-size;
+    container-name: card;
+  }
+
+  /* Responsive single-line text that scales with container */
+  @container card (max-width: 350px) {
+    .single-line-text {
+      font-size: 0.7em;
+    }
+  }
+
+  @container card (min-width: 351px) and (max-width: 500px) {
+    .single-line-text {
+      font-size: 0.75em;
+    }
+  }
+
+  @container card (min-width: 501px) and (max-width: 768px) {
+    .single-line-text {
+      font-size: 0.8em;
+    }
+  }
+
+  @container card (min-width: 769px) {
+    .single-line-text {
+      font-size: 0.85em;
+    }
+  }
 }
 

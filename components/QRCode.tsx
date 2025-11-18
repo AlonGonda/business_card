@@ -17,13 +17,13 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
   const [qrSize, setQrSize] = useState(size)
   const vcardData = generateVCard(contact)
   
-  // Make QR code responsive
+  // Make QR code responsive to screen size
   useEffect(() => {
     const updateSize = () => {
-      const maxWidth = window.innerWidth * 0.35
-      const maxHeight = window.innerHeight * 0.25
-      const newSize = Math.min(size, maxWidth, maxHeight, 180)
-      setQrSize(Math.max(Math.round(newSize), 100)) // Minimum 100px
+      const maxWidth = window.innerWidth * 0.4
+      const maxHeight = window.innerHeight * 0.3
+      const newSize = Math.min(size, maxWidth, maxHeight, 250)
+      setQrSize(Math.max(Math.round(newSize), 120)) // Minimum 120px, larger for better visibility
     }
     updateSize()
     window.addEventListener('resize', updateSize)

@@ -24,7 +24,7 @@ export default function Home() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 w-full h-full max-w-md max-h-[calc(100vh-1rem)] sm:max-h-[calc(100vh-2rem)] flex items-center justify-center">
+      <div className="relative z-10 w-full h-full max-w-full max-h-full flex items-center justify-center overflow-hidden px-2 sm:px-4 md:px-6 lg:px-8">
         <BusinessCard
           contact={contact}
           whatsappUrl={whatsappUrl}
