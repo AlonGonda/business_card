@@ -60,33 +60,27 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
   }, [])
 
   const handleDownload = async () => {
+    // For embedded browsers, show fallback menu immediately since downloads often don't work
+    if (isEmbeddedBrowser) {
+      setShowFallback(true)
+      return
+    }
+    
     setIsDownloading(true)
     setShowFallback(false)
     
+    const apiUrl = '/api/vcard'
+    const filename = `${contact.name.replace(/\s+/g, '_')}.vcf`
+    
     try {
-      // Primary method: Use direct link to API endpoint (works in Instagram and all browsers)
-      // This is the most reliable method for embedded browsers
-      const apiUrl = '/api/vcard'
-      
-      if (isEmbeddedBrowser) {
-        // For embedded browsers, use window.location.href for direct navigation
-        // This triggers the download through the server endpoint
-        window.location.href = apiUrl
-        // Give it time to start the download
-        await new Promise(resolve => setTimeout(resolve, 500))
-        setIsDownloading(false)
-        return
-      }
-      
-      // For regular browsers, try creating a link to the API endpoint
+      // For regular browsers, use standard link download
       const link = document.createElement('a')
       link.href = apiUrl
-      link.download = `${contact.name.replace(/\s+/g, '_')}.vcf`
+      link.download = filename
       link.style.display = 'none'
       document.body.appendChild(link)
       link.click()
       
-      // Wait a bit for download to start
       await new Promise(resolve => setTimeout(resolve, 300))
       
       document.body.removeChild(link)
@@ -94,7 +88,6 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
     } catch (error) {
       console.error('Download failed:', error)
       setIsDownloading(false)
-      // Show fallback menu if direct download fails
       setShowFallback(true)
     }
   }
@@ -179,7 +172,9 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
               </div>
               
               <p className="text-xs text-gray-300 mb-3">
-                Choose an option to save this contact:
+                {isEmbeddedBrowser 
+                  ? 'Instagram browser doesn\'t support direct downloads. Choose an option:'
+                  : 'Choose an option to save this contact:'}
               </p>
 
               <div className="space-y-2">
@@ -201,6 +196,20 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
                     </>
                   )}
                 </motion.button>
+
+                {isEmbeddedBrowser && (
+                  <motion.a
+                    href="/api/vcard"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-primary-500 hover:bg-primary-400 text-white rounded-lg font-medium transition-colors text-sm"
+                  >
+                    <FaDownload className="w-4 h-4" />
+                    <span>Try Download Link</span>
+                  </motion.a>
+                )}
 
                 <div className="grid grid-cols-2 gap-2">
                   <motion.a
