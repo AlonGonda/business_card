@@ -153,23 +153,35 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
 
         <AnimatePresence>
           {showFallback && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="absolute top-full left-0 right-0 mt-2 p-4 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-50"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-white">Save Contact</h3>
-                <button
-                  onClick={() => setShowFallback(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                  aria-label="Close"
-                >
-                  <FaTimes className="w-4 h-4" />
-                </button>
-              </div>
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setShowFallback(false)}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+              />
+              
+              {/* Modal */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                transition={{ duration: 0.2 }}
+                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md p-4 sm:p-6 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-50 max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-white">Save Contact</h3>
+                  <button
+                    onClick={() => setShowFallback(false)}
+                    className="text-gray-400 hover:text-white transition-colors p-1"
+                    aria-label="Close"
+                  >
+                    <FaTimes className="w-5 h-5" />
+                  </button>
+                </div>
               
               <p className="text-xs text-gray-300 mb-3">
                 {isEmbeddedBrowser 
@@ -232,7 +244,8 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
                   </motion.a>
                 </div>
               </div>
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
