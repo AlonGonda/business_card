@@ -63,106 +63,38 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
     setIsDownloading(true)
     setShowFallback(false)
     
-    const filename = `${contact.name.replace(/\s+/g, '_')}.vcf`
-    let downloadSuccess = false
-    
     try {
-      // Method 1: Try standard download with blob URL
-      const blob = new Blob([vcardData], { type: 'text/vcard;charset=utf-8' })
-      const url = URL.createObjectURL(blob)
+      // Primary method: Use direct link to API endpoint (works in Instagram and all browsers)
+      // This is the most reliable method for embedded browsers
+      const apiUrl = '/api/vcard'
+      
+      if (isEmbeddedBrowser) {
+        // For embedded browsers, use window.location.href for direct navigation
+        // This triggers the download through the server endpoint
+        window.location.href = apiUrl
+        // Give it time to start the download
+        await new Promise(resolve => setTimeout(resolve, 500))
+        setIsDownloading(false)
+        return
+      }
+      
+      // For regular browsers, try creating a link to the API endpoint
       const link = document.createElement('a')
-      link.href = url
-      link.download = filename
-      link.setAttribute('download', filename)
+      link.href = apiUrl
+      link.download = `${contact.name.replace(/\s+/g, '_')}.vcf`
       link.style.display = 'none'
       document.body.appendChild(link)
       link.click()
       
-      // Wait a bit to see if download started
+      // Wait a bit for download to start
       await new Promise(resolve => setTimeout(resolve, 300))
       
       document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-      downloadSuccess = true
+      setIsDownloading(false)
     } catch (error) {
-      console.log('Method 1 failed, trying method 2...')
-    }
-    
-    // Method 2: Try data URI with window.open (works in many embedded browsers)
-    if (!downloadSuccess) {
-      try {
-        const dataUri = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcardData)}`
-        const link = document.createElement('a')
-        link.href = dataUri
-        link.download = filename
-        link.setAttribute('download', filename)
-        link.style.display = 'none'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        
-        await new Promise(resolve => setTimeout(resolve, 300))
-        downloadSuccess = true
-      } catch (error) {
-        console.log('Method 2 failed, trying method 3...')
-      }
-    }
-    
-    // Method 3: Try opening data URI in new window/tab (for embedded browsers)
-    if (!downloadSuccess && isEmbeddedBrowser) {
-      try {
-        const dataUri = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcardData)}`
-        const newWindow = window.open(dataUri, '_blank')
-        if (newWindow) {
-          // Give it time to open, then close
-          setTimeout(() => {
-            try {
-              newWindow.close()
-            } catch (e) {
-              // Ignore close errors
-            }
-          }, 1000)
-          downloadSuccess = true
-        }
-      } catch (error) {
-        console.log('Method 3 failed, trying method 4...')
-      }
-    }
-    
-    // Method 4: Try creating a temporary link with target="_blank" and download attribute
-    if (!downloadSuccess) {
-      try {
-        const blob = new Blob([vcardData], { type: 'text/vcard;charset=utf-8' })
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.download = filename
-        link.target = '_blank'
-        link.rel = 'noopener noreferrer'
-        link.style.position = 'absolute'
-        link.style.left = '-9999px'
-        document.body.appendChild(link)
-        
-        // Trigger click with a slight delay
-        setTimeout(() => {
-          link.click()
-          setTimeout(() => {
-            document.body.removeChild(link)
-            URL.revokeObjectURL(url)
-          }, 100)
-        }, 50)
-        
-        await new Promise(resolve => setTimeout(resolve, 500))
-        downloadSuccess = true
-      } catch (error) {
-        console.log('Method 4 failed')
-      }
-    }
-    
-    setIsDownloading(false)
-    
-    // Only show fallback if all methods failed
-    if (!downloadSuccess) {
+      console.error('Download failed:', error)
+      setIsDownloading(false)
+      // Show fallback menu if direct download fails
       setShowFallback(true)
     }
   }
