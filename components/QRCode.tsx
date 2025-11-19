@@ -94,8 +94,9 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
 
   const handleCopyVCard = async () => {
     try {
+      const phoneNumber = contact.phone
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(vcardData)
+        await navigator.clipboard.writeText(phoneNumber)
         setCopied(true)
         setTimeout(() => {
           setCopied(false)
@@ -104,7 +105,7 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
       } else {
         // Fallback for older browsers
         const textArea = document.createElement('textarea')
-        textArea.value = vcardData
+        textArea.value = phoneNumber
         textArea.style.position = 'fixed'
         textArea.style.opacity = '0'
         textArea.style.left = '-999999px'
@@ -119,59 +120,70 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
         }, 2000)
       }
     } catch (err) {
-      // If copy fails, show the vCard data in an alert
-      alert(`Please copy this contact data:\n\n${vcardData}`)
+      // If copy fails, show the phone number in an alert
+      alert(`Please copy this phone number:\n\n${contact.phone}`)
     }
   }
 
   return (
-    <div ref={containerRef} className="flex flex-col items-center gap-2 w-full">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="p-2 bg-white rounded-lg shadow-lg"
-      >
-        <QRCodeSVG
-          value={vcardData}
-          size={Math.round(qrSize)}
-          level="H"
-          includeMargin={true}
-        />
-      </motion.div>
-      <div className="relative w-full">
-        <motion.button
-          onClick={handleDownload}
-          disabled={isDownloading}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-full flex items-center justify-center gap-2 px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm"
+    <>
+      <div ref={containerRef} className="flex flex-col items-center gap-2 w-full">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="p-2 bg-white rounded-lg shadow-lg"
         >
-          <FaDownload className="w-4 h-4" />
-          <span>{isDownloading ? 'Saving...' : 'Save Contact'}</span>
-        </motion.button>
+          <QRCodeSVG
+            value={vcardData}
+            size={Math.round(qrSize)}
+            level="H"
+            includeMargin={true}
+          />
+        </motion.div>
+        <div className="relative w-full">
+          <motion.button
+            onClick={handleDownload}
+            disabled={isDownloading}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-full flex items-center justify-center gap-2 px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm"
+          >
+            <FaDownload className="w-4 h-4" />
+            <span>{isDownloading ? 'Saving...' : 'Save Contact'}</span>
+          </motion.button>
+        </div>
+      </div>
 
-        <AnimatePresence>
-          {showFallback && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                onClick={() => setShowFallback(false)}
-                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-              />
-              
-              {/* Modal */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                transition={{ duration: 0.2 }}
-                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md p-4 sm:p-6 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-50 max-h-[90vh] overflow-y-auto"
-              >
+      {/* Modal rendered outside container for proper fixed positioning */}
+      <AnimatePresence>
+        {showFallback && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setShowFallback(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+              style={{ position: 'fixed' }}
+            />
+            
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.2 }}
+              className="fixed z-[9999] w-[90%] max-w-md p-4 sm:p-6 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto"
+              style={{
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <h3 className="text-base sm:text-lg font-semibold text-white">Save Contact</h3>
                   <button
@@ -199,12 +211,12 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
                   {copied ? (
                     <>
                       <FaCheck className="w-4 h-4" />
-                      <span>Copied! Paste in Contacts app</span>
+                      <span>Phone Number Copied!</span>
                     </>
                   ) : (
                     <>
                       <FaCopy className="w-4 h-4" />
-                      <span>Copy Contact Data</span>
+                      <span>Copy Phone Number</span>
                     </>
                   )}
                 </motion.button>
@@ -244,11 +256,10 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
                   </motion.a>
                 </div>
               </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </div>
-    </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
