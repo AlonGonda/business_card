@@ -174,13 +174,13 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
                 </h3>
                 <div className="text-gray-200 leading-relaxed font-medium w-full flex-1 flex flex-col justify-center card-gap">
                   <div className="card-services-text text-primary-300/90 font-semibold w-full text-center flex-shrink-0 px-2 break-words">
-                    🎉 Weddings • 🏢 Corporate Events • 🎪 Private Parties • 🎭 Special Occasions
+                    🎉 Weddings 🏢 Corporate Events 🎪 Private Parties 🎭 Special Occasions
                   </div>
                   <p className="card-description break-words flex-shrink-0 text-center px-2">
                     Every performance is a masterpiece, crafted with passion, precision, and pure musical magic! Whether you're planning an intimate gathering or a grand celebration, I bring the soulful sound of the saxophone to make your event truly unforgettable.
                   </p>
                   <div className="card-services-cta text-primary-300/90 font-semibold italic w-full text-center flex-shrink-0 mt-1 px-2 break-words">
-                    ✨ Let's have some fun! 🎷✨
+                    🎷 Let's have some fun! 🎷
                   </div>
                 </div>
               </div>
