@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import QRCode from './QRCode'
@@ -17,30 +18,58 @@ interface BusinessCardProps {
 
 export default function BusinessCard({ contact, whatsappUrl, instagramUrl, services }: BusinessCardProps) {
   const [isFlipped, setIsFlipped] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const flipButton = (
+    <button
+      onClick={() => setIsFlipped(!isFlipped)}
+      className="fixed top-3 right-3 px-3 py-2 rounded-lg bg-primary-600/90 hover:bg-primary-500 active:bg-primary-700 border-2 border-primary-400/50 shadow-lg z-[100] flex items-center gap-2 group touch-manipulation"
+      aria-label="Flip card"
+      style={{ 
+        WebkitTapHighlightColor: 'transparent',
+        willChange: 'auto',
+        backfaceVisibility: 'visible',
+        WebkitBackfaceVisibility: 'visible',
+        isolation: 'isolate',
+        contain: 'layout style paint',
+        pointerEvents: 'auto',
+      }}
+    >
+      <FaSync className="w-4 h-4 text-white group-hover:rotate-180 group-active:rotate-180 transition-transform duration-300" />
+      <span className="text-white text-sm font-medium">Flip</span>
+    </button>
+  )
 
   return (
-    <div className="perspective-1000 business-card-container w-full h-full max-w-full mx-auto flex items-center justify-center relative">
-      {/* Single Flip Button - Always visible */}
-      <button
-        onClick={() => setIsFlipped(!isFlipped)}
-        className="absolute top-3 right-3 px-3 py-2 rounded-lg bg-primary-600/90 hover:bg-primary-500 active:bg-primary-700 border-2 border-primary-400/50 shadow-lg transition-all z-20 flex items-center gap-2 group touch-manipulation"
-        aria-label="Flip card"
-        style={{ WebkitTapHighlightColor: 'transparent' }}
-      >
-        <FaSync className="w-4 h-4 text-white group-hover:rotate-180 group-active:rotate-180 transition-transform duration-300" />
-        <span className="text-white text-sm font-medium">Flip</span>
-      </button>
+    <>
+      {mounted && createPortal(flipButton, document.body)}
+      <div className="perspective-1000 business-card-container w-full h-full max-w-full mx-auto flex items-center justify-center relative">
 
       <motion.div
         className="relative w-full h-full max-h-full preserve-3d"
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
-        style={{ transformStyle: 'preserve-3d' }}
+        style={{ 
+          transformStyle: 'preserve-3d',
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+        }}
       >
         {/* Front of Card */}
         <motion.div
           className="absolute inset-0 backface-hidden w-full h-full"
-          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+          style={{ 
+            backfaceVisibility: 'hidden', 
+            WebkitBackfaceVisibility: 'hidden',
+            willChange: 'transform',
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)',
+          }}
         >
           <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl border border-gray-700/50 h-full max-h-full flex flex-col overflow-hidden card-base card-padding">
 
@@ -107,7 +136,9 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
+            willChange: 'transform',
+            transform: 'rotateY(180deg) translateZ(0)',
+            WebkitTransform: 'rotateY(180deg) translateZ(0)',
           }}
         >
           <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl border border-gray-700/50 h-full max-h-full flex flex-col overflow-hidden card-base card-padding">
@@ -171,6 +202,7 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
           </div>
         </motion.div>
       </motion.div>
-    </div>
+      </div>
+    </>
   )
 }
