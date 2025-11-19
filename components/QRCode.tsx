@@ -4,6 +4,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { ContactInfo } from '@/lib/vcard'
 import { generateVCard } from '@/lib/vcard'
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaDownload, FaCopy, FaPhone, FaEnvelope, FaTimes, FaCheck } from 'react-icons/fa'
 
@@ -18,8 +19,14 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
   const [showFallback, setShowFallback] = useState(false)
   const [isEmbeddedBrowser, setIsEmbeddedBrowser] = useState(false)
   const [qrSize, setQrSize] = useState(size)
+  const [mounted, setMounted] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const vcardData = generateVCard(contact)
+  
+  // Ensure we're mounted before rendering portal (SSR safety)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   // Detect if we're in an embedded browser (Instagram, Facebook, etc.)
   useEffect(() => {
@@ -155,35 +162,37 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
         </div>
       </div>
 
-      {/* Modal rendered outside container for proper fixed positioning */}
-      <AnimatePresence>
-        {showFallback && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={() => setShowFallback(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
-              style={{ position: 'fixed' }}
-            />
-            
-            {/* Modal */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ duration: 0.2 }}
-              className="fixed z-[9999] w-[90%] max-w-md p-4 sm:p-6 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto"
-              style={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-              }}
-            >
+      {/* Modal rendered via portal to document.body for proper centering */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {showFallback && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setShowFallback(false)}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+                style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+              />
+              
+              {/* Modal - Centered using flexbox */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+                className="fixed z-[9999] w-[90%] max-w-md p-4 sm:p-6 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto"
+                style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  margin: 0,
+                }}
+              >
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <h3 className="text-base sm:text-lg font-semibold text-white">Save Contact</h3>
                   <button
@@ -256,10 +265,12 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
                   </motion.a>
                 </div>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   )
 }
