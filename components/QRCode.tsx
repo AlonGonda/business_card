@@ -178,19 +178,19 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
                 style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
               />
               
-              {/* Modal - Centered using flexbox */}
+              {/* Modal - Centered */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
+                animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+                exit={{ opacity: 0, scale: 0.9, x: '-50%', y: '-50%' }}
                 transition={{ duration: 0.2 }}
                 className="fixed z-[9999] w-[90%] max-w-md p-4 sm:p-6 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl max-h-[90vh] overflow-y-auto"
                 style={{
                   position: 'fixed',
                   top: '50%',
                   left: '50%',
-                  transform: 'translate(-50%, -50%)',
                   margin: 0,
+                  pointerEvents: 'auto',
                 }}
               >
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
