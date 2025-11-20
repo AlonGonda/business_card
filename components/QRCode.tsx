@@ -134,12 +134,25 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
 
   return (
     <>
-      <div ref={containerRef} className="flex flex-col items-center gap-2 w-full">
+      <div ref={containerRef} className="flex flex-col items-center gap-2 w-full" style={{
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+        transform: 'translateZ(0)',
+        WebkitTransform: 'translateZ(0)',
+      }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
           className="p-2 bg-white rounded-lg shadow-lg"
+          style={{
+            willChange: 'transform',
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            transform: 'translateZ(0)',
+            WebkitTransform: 'translateZ(0)',
+          }}
         >
           <QRCodeSVG
             value={vcardData}
@@ -148,13 +161,27 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
             includeMargin={true}
           />
         </motion.div>
-        <div className="relative w-full">
+        <div className="relative w-full" style={{ 
+          willChange: 'transform',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+          transform: 'translateZ(0)',
+          WebkitTransform: 'translateZ(0)',
+        }}>
           <motion.button
             onClick={handleDownload}
             disabled={isDownloading}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="w-full flex items-center justify-center gap-2 px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm"
+            style={{
+              willChange: 'transform',
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+              WebkitTransform: 'translateZ(0)',
+              isolation: 'isolate',
+            }}
           >
             <FaDownload className="w-4 h-4" />
             <span>{isDownloading ? 'Saving...' : 'Save Contact'}</span>
