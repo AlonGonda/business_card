@@ -63,8 +63,8 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
             WebkitBackfaceVisibility: 'hidden',
             transformStyle: 'preserve-3d',
             WebkitTransformStyle: 'preserve-3d',
-            transform: 'translate3d(0,0,0) rotateY(0deg)',
-            WebkitTransform: 'translate3d(0,0,0) rotateY(0deg)',
+            transform: 'translate3d(0,0,0)',
+            WebkitTransform: 'translate3d(0,0,0)',
           }}
         >
           <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl border border-gray-700/50 h-full max-h-full flex flex-col overflow-hidden card-base card-padding">
@@ -105,19 +105,21 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
             </motion.div>
 
             {/* QR Code */}
-            <div
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
               className="flex-1 flex items-center justify-center min-h-0 overflow-hidden"
               style={{
                 backfaceVisibility: 'hidden',
                 WebkitBackfaceVisibility: 'hidden',
                 transform: 'translate3d(0,0,0)',
                 WebkitTransform: 'translate3d(0,0,0)',
-                WebkitTransformStyle: 'preserve-3d',
-                isolation: 'isolate',
+                contain: 'strict',
               }}
             >
               <QRCode contact={contact} size={180} />
-            </div>
+            </motion.div>
 
             {/* Hint Text */}
             <motion.div
@@ -137,10 +139,7 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            transformStyle: 'preserve-3d',
-            WebkitTransformStyle: 'preserve-3d',
-            transform: 'translate3d(0,0,0) rotateY(180deg)',
-            WebkitTransform: 'translate3d(0,0,0) rotateY(180deg)',
+            transform: 'rotateY(180deg)',
           }}
         >
           <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl border border-gray-700/50 h-full max-h-full flex flex-col overflow-hidden card-base card-padding">
