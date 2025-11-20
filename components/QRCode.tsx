@@ -135,11 +135,12 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
   return (
     <>
       <div ref={containerRef} className="flex flex-col items-center gap-2 w-full" style={{
-        willChange: 'transform',
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
-        transform: 'translateZ(0)',
-        WebkitTransform: 'translateZ(0)',
+        transform: 'translate3d(0,0,0)',
+        WebkitTransform: 'translate3d(0,0,0)',
+        contain: 'layout style paint',
+        position: 'relative',
       }}>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -147,11 +148,11 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
           transition={{ duration: 0.5 }}
           className="p-2 bg-white rounded-lg shadow-lg"
           style={{
-            willChange: 'transform',
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            transform: 'translateZ(0)',
-            WebkitTransform: 'translateZ(0)',
+            transform: 'translate3d(0,0,0)',
+            WebkitTransform: 'translate3d(0,0,0)',
+            position: 'relative',
           }}
         >
           <QRCodeSVG
@@ -162,11 +163,10 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
           />
         </motion.div>
         <div className="relative w-full" style={{ 
-          willChange: 'transform',
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
-          transform: 'translateZ(0)',
-          WebkitTransform: 'translateZ(0)',
+          transform: 'translate3d(0,0,0)',
+          WebkitTransform: 'translate3d(0,0,0)',
         }}>
           <motion.button
             onClick={handleDownload}
@@ -175,12 +175,10 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
             whileTap={{ scale: 0.95 }}
             className="w-full flex items-center justify-center gap-2 px-3 py-1.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors disabled:opacity-50 text-sm"
             style={{
-              willChange: 'transform',
               backfaceVisibility: 'hidden',
               WebkitBackfaceVisibility: 'hidden',
-              transform: 'translateZ(0)',
-              WebkitTransform: 'translateZ(0)',
-              isolation: 'isolate',
+              transform: 'translate3d(0,0,0)',
+              WebkitTransform: 'translate3d(0,0,0)',
             }}
           >
             <FaDownload className="w-4 h-4" />
