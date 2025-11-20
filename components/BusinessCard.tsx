@@ -45,31 +45,20 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
   )
 
   return (
-    <>
+    <div className="perspective-1000 business-card-container w-full h-full max-w-full mx-auto flex items-center justify-center relative">
+      {/* Single Flip Button - Always visible */}
       {mounted && createPortal(flipButton, document.body)}
-      <div className="perspective-1000 business-card-container w-full h-full max-w-full mx-auto flex items-center justify-center relative">
 
       <motion.div
         className="relative w-full h-full max-h-full preserve-3d"
         animate={{ rotateY: isFlipped ? 180 : 0 }}
         transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
-        style={{ 
-          transformStyle: 'preserve-3d',
-          willChange: 'transform',
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-        }}
+        style={{ transformStyle: 'preserve-3d' }}
       >
         {/* Front of Card */}
         <motion.div
           className="absolute inset-0 backface-hidden w-full h-full"
-          style={{ 
-            backfaceVisibility: 'hidden', 
-            WebkitBackfaceVisibility: 'hidden',
-            willChange: 'transform',
-            transform: 'translateZ(0)',
-            WebkitTransform: 'translateZ(0)',
-          }}
+          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
         >
           <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl border border-gray-700/50 h-full max-h-full flex flex-col overflow-hidden card-base card-padding">
 
@@ -136,9 +125,7 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
-            willChange: 'transform',
-            transform: 'rotateY(180deg) translateZ(0)',
-            WebkitTransform: 'rotateY(180deg) translateZ(0)',
+            transform: 'rotateY(180deg)',
           }}
         >
           <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl shadow-2xl border border-gray-700/50 h-full max-h-full flex flex-col overflow-hidden card-base card-padding">
@@ -202,7 +189,6 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
           </div>
         </motion.div>
       </motion.div>
-      </div>
-    </>
+    </div>
   )
 }
