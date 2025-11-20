@@ -139,19 +139,18 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
         WebkitBackfaceVisibility: 'hidden',
         transform: 'translate3d(0,0,0)',
         WebkitTransform: 'translate3d(0,0,0)',
-        contain: 'layout style paint',
+        WebkitTransformStyle: 'preserve-3d',
         position: 'relative',
+        isolation: 'isolate',
       }}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
+        <div
           className="p-2 bg-white rounded-lg shadow-lg"
           style={{
             backfaceVisibility: 'hidden',
             WebkitBackfaceVisibility: 'hidden',
             transform: 'translate3d(0,0,0)',
             WebkitTransform: 'translate3d(0,0,0)',
+            WebkitTransformStyle: 'preserve-3d',
             position: 'relative',
           }}
         >
@@ -161,12 +160,13 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
             level="H"
             includeMargin={true}
           />
-        </motion.div>
+        </div>
         <div className="relative w-full" style={{ 
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
           transform: 'translate3d(0,0,0)',
           WebkitTransform: 'translate3d(0,0,0)',
+          WebkitTransformStyle: 'preserve-3d',
         }}>
           <motion.button
             onClick={handleDownload}
@@ -179,6 +179,7 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
               WebkitBackfaceVisibility: 'hidden',
               transform: 'translate3d(0,0,0)',
               WebkitTransform: 'translate3d(0,0,0)',
+              WebkitTransformStyle: 'preserve-3d',
             }}
           >
             <FaDownload className="w-4 h-4" />
