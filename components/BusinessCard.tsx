@@ -19,9 +19,17 @@ interface BusinessCardProps {
 export default function BusinessCard({ contact, whatsappUrl, instagramUrl, services }: BusinessCardProps) {
   const [isFlipped, setIsFlipped] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isInstagramBrowser, setIsInstagramBrowser] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    
+    // Detect Instagram browser for conditional animation rendering
+    if (typeof window !== 'undefined') {
+      const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera
+      const isInstagram = /Instagram/i.test(userAgent)
+      setIsInstagramBrowser(isInstagram)
+    }
   }, [])
 
   const flipButton = (
@@ -105,21 +113,36 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
             </motion.div>
 
             {/* QR Code */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex-1 flex items-center justify-center min-h-0 overflow-hidden"
-              style={{
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                transform: 'translate3d(0,0,0)',
-                WebkitTransform: 'translate3d(0,0,0)',
-                contain: 'strict',
-              }}
-            >
-              <QRCode contact={contact} size={180} />
-            </motion.div>
+            {isInstagramBrowser ? (
+              <div
+                className="flex-1 flex items-center justify-center min-h-0 overflow-hidden"
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  transform: 'translate3d(0,0,0)',
+                  WebkitTransform: 'translate3d(0,0,0)',
+                  contain: 'strict',
+                }}
+              >
+                <QRCode contact={contact} size={180} />
+              </div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="flex-1 flex items-center justify-center min-h-0 overflow-hidden"
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  transform: 'translate3d(0,0,0)',
+                  WebkitTransform: 'translate3d(0,0,0)',
+                  contain: 'strict',
+                }}
+              >
+                <QRCode contact={contact} size={180} />
+              </motion.div>
+            )}
 
             {/* Hint Text */}
             <motion.div

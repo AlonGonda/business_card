@@ -3,7 +3,7 @@
 import { QRCodeSVG } from 'qrcode.react'
 import { ContactInfo } from '@/lib/vcard'
 import { generateVCard } from '@/lib/vcard'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, memo } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaDownload, FaCopy, FaPhone, FaEnvelope, FaTimes, FaCheck } from 'react-icons/fa'
@@ -13,11 +13,12 @@ interface QRCodeProps {
   size?: number
 }
 
-export default function QRCode({ contact, size = 200 }: QRCodeProps) {
+function QRCode({ contact, size = 200 }: QRCodeProps) {
   const [isDownloading, setIsDownloading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showFallback, setShowFallback] = useState(false)
   const [isEmbeddedBrowser, setIsEmbeddedBrowser] = useState(false)
+  const [isInstagramBrowser, setIsInstagramBrowser] = useState(false)
   const [qrSize, setQrSize] = useState(size)
   const [mounted, setMounted] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -41,6 +42,7 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
     const isWebView = /wv|WebView/i.test(userAgent)
     
     setIsEmbeddedBrowser(isInAppBrowser || isWebView)
+    setIsInstagramBrowser(isInstagram)
   }, [])
   
   // Make QR code responsive to container size
@@ -142,26 +144,46 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
         contain: 'layout style paint',
         position: 'relative',
       }}>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="p-2 bg-white rounded-lg shadow-lg"
-          style={{
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden',
-            transform: 'translate3d(0,0,0)',
-            WebkitTransform: 'translate3d(0,0,0)',
-            position: 'relative',
-          }}
-        >
-          <QRCodeSVG
-            value={vcardData}
-            size={Math.round(qrSize)}
-            level="H"
-            includeMargin={true}
-          />
-        </motion.div>
+        {isInstagramBrowser ? (
+          <div
+            className="p-2 bg-white rounded-lg shadow-lg"
+            style={{
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'translate3d(0,0,0)',
+              WebkitTransform: 'translate3d(0,0,0)',
+              position: 'relative',
+            }}
+          >
+            <QRCodeSVG
+              value={vcardData}
+              size={Math.round(qrSize)}
+              level="H"
+              includeMargin={true}
+            />
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="p-2 bg-white rounded-lg shadow-lg"
+            style={{
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'translate3d(0,0,0)',
+              WebkitTransform: 'translate3d(0,0,0)',
+              position: 'relative',
+            }}
+          >
+            <QRCodeSVG
+              value={vcardData}
+              size={Math.round(qrSize)}
+              level="H"
+              includeMargin={true}
+            />
+          </motion.div>
+        )}
         <div className="relative w-full" style={{ 
           backfaceVisibility: 'hidden',
           WebkitBackfaceVisibility: 'hidden',
@@ -296,6 +318,8 @@ export default function QRCode({ contact, size = 200 }: QRCodeProps) {
         </AnimatePresence>,
         document.body
       )}
-    </>
+    </> 
   )
 }
+
+export default memo(QRCode)
