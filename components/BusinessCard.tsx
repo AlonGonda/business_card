@@ -113,20 +113,7 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
             </motion.div>
 
             {/* QR Code */}
-            {isInstagramBrowser ? (
-              <div
-                className="flex-1 flex items-center justify-center min-h-0 overflow-hidden"
-                style={{
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden',
-                  transform: 'translate3d(0,0,0)',
-                  WebkitTransform: 'translate3d(0,0,0)',
-                  contain: 'strict',
-                }}
-              >
-                <QRCode contact={contact} size={180} />
-              </div>
-            ) : (
+            {!isInstagramBrowser && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -226,6 +213,24 @@ export default function BusinessCard({ contact, whatsappUrl, instagramUrl, servi
           </div>
         </motion.div>
       </motion.div>
+
+      {/* Instagram embedded browser: render QR outside the 3D flip to avoid flicker.
+          Visible only on the front (when not flipped). */}
+      {isInstagramBrowser && !isFlipped && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div
+            className="pointer-events-auto flex items-center justify-center"
+            style={{
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'translate3d(0,0,0)',
+              WebkitTransform: 'translate3d(0,0,0)',
+            }}
+          >
+            <QRCode contact={contact} size={180} />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
